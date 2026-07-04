@@ -14,6 +14,7 @@ import { dirname, join, basename } from 'node:path';
 import type { OcrDoc } from './ocr-types.js';
 import { docToBlocks } from './layout.js';
 import { buildDocx } from './docx-writer.js';
+import { applyPatentFixes } from './patent-fixes.js';
 import { OpcPackage } from '../opc/package.js';
 import { runPipeline } from '../engine/pipeline.js';
 
@@ -70,8 +71,21 @@ async function main(): Promise<void> {
       figures += 1;
     }
   }
+  // High-confidence patent OCR fixes (kind codes, term-adjustment boilerplate).
+  let patentFixes = 0;
+  for (const b of blocks) {
+    if ((b.kind === 'body' || b.kind === 'heading') && b.text) {
+      const r = applyPatentFixes(b.text);
+      b.text = r.text;
+      patentFixes += r.count;
+    }
+  }
+
   const textBlocks = blocks.filter((b) => b.kind !== 'pagebreak' && b.kind !== 'image').length;
-  console.error(`Reconstructed ${textBlocks} text blocks, ${figures} figure pages kept as images.`);
+  console.error(
+    `Reconstructed ${textBlocks} text blocks, ${figures} figure pages kept as images, ` +
+      `${patentFixes} patent fixes.`,
+  );
 
   let bytes = await buildDocx(blocks, basename(input).replace(/\.pdf$/i, ''));
 
