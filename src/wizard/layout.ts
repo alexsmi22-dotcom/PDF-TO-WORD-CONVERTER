@@ -18,6 +18,47 @@ function median(nums: number[]): number {
   return s[Math.floor(s.length / 2)]!;
 }
 
+/**
+ * Remove running headers/footers (e.g. the patent number and "Sheet 5 of 27")
+ * that OCR captures at the top/bottom of every page and that otherwise get
+ * merged into the body text. A top/bottom-band line whose digit-normalized form
+ * repeats across many pages is a running head/foot. Mutates the pages; returns
+ * how many lines were removed.
+ */
+export function stripRunningHeadersFooters(pages: OcrPage[]): number {
+  const norm = (s: string) =>
+    s.trim().replace(/\d+/g, '#').replace(/\s+/g, ' ').toLowerCase();
+  const inBand = (l: OcrLine) => l.y < 0.09 || l.y + l.h > 0.91;
+
+  const freq = new Map<string, number>();
+  for (const page of pages) {
+    const seen = new Set<string>();
+    for (const l of page.lines) {
+      if (!inBand(l)) continue;
+      const key = norm(l.text);
+      if (key.length < 2 || key.length > 60) continue;
+      if (!seen.has(key)) {
+        seen.add(key);
+        freq.set(key, (freq.get(key) ?? 0) + 1);
+      }
+    }
+  }
+
+  const threshold = Math.max(3, Math.floor(pages.length * 0.3));
+  const running = new Set(
+    [...freq].filter(([, n]) => n >= threshold).map(([k]) => k),
+  );
+  if (running.size === 0) return 0;
+
+  let removed = 0;
+  for (const page of pages) {
+    const before = page.lines.length;
+    page.lines = page.lines.filter((l) => !(inBand(l) && running.has(norm(l.text))));
+    removed += before - page.lines.length;
+  }
+  return removed;
+}
+
 /** Order lines into a single reading sequence, handling two-column layouts. */
 function orderLines(lines: OcrLine[]): OcrLine[] {
   const body = lines.filter((l) => !isFullWidth(l));

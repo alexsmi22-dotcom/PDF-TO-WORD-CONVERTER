@@ -12,7 +12,7 @@ import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, basename } from 'node:path';
 import type { OcrDoc } from './ocr-types.js';
-import { docToBlocks } from './layout.js';
+import { docToBlocks, stripRunningHeadersFooters } from './layout.js';
 import { buildDocx } from './docx-writer.js';
 import { applyPatentFixes } from './patent-fixes.js';
 import { OpcPackage } from '../opc/package.js';
@@ -61,6 +61,9 @@ async function main(): Promise<void> {
   console.error(`OCR (${process.platform})…`);
   const ocr = runOcr(input, maxPages);
   console.error(`OCR done: ${ocr.pages.length} pages via ${ocr.engine}.`);
+
+  const headerLines = stripRunningHeadersFooters(ocr.pages);
+  if (headerLines > 0) console.error(`Removed ${headerLines} running header/footer lines.`);
 
   const blocks = docToBlocks(ocr.pages);
   // Load image bytes for figure pages we're embedding.
