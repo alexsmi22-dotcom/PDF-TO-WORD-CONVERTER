@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>Text the converter split into two fake columns.</w:t></w:r></w:p>
+    <w:sectPr>
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:cols w:num="2" w:space="720">
+        <w:col w:w="4320" w:space="720"/>
+        <w:col w:w="4320"/>
+      </w:cols>
+    </w:sectPr>
+  </w:body>
+</w:document>

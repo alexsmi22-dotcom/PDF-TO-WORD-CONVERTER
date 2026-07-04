@@ -1,4 +1,6 @@
 import type { Rule } from '../engine/types.js';
+import { sectionBreaksRule } from './structural/section-breaks.js';
+import { columnsRule } from './structural/columns.js';
 import { softHyphenRule } from './character/soft-hyphen.js';
 import { ligaturesRule } from './character/ligatures.js';
 
@@ -14,7 +16,10 @@ import { ligaturesRule } from './character/ligatures.js';
 export const PIPELINE: readonly Rule[] = [
   // 2. Text box extraction            -> structural (Phase 1.1)
   // 3. Header/footer/page dedup       -> structural (Phase 1.1)
-  // 4. Section normalize + col flatten-> structural (Phase 1)
+  // 4. Section normalize, then column flatten (order matters: columns live in
+  //    section properties, so section handling decides what survives):
+  sectionBreaksRule,
+  columnsRule,
   // 5. Style inference                -> style      (Phase 1.1)
   // 6. Paragraph reflow + collapse    -> layout     (Phase 1.1)
   // 7. Line spacing normalize         -> layout     (Phase 1)
