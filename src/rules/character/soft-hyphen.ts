@@ -1,17 +1,7 @@
 import type { Rule, RuleContext, Finding, ChangeLogEntry } from '../../engine/types.js';
+import { elementsByTag, mapTextRuns } from '../../engine/dom.js';
 
 const SOFT_HYPHEN = '­';
-
-/** Snapshot a live element collection into a stable array before mutating. */
-function elements(doc: Document, tag: string): Element[] {
-  const live = doc.getElementsByTagName(tag);
-  const out: Element[] = [];
-  for (let i = 0; i < live.length; i++) {
-    const el = live[i];
-    if (el) out.push(el);
-  }
-  return out;
-}
 
 /**
  * 6.9 Soft hyphen removal (character, auto).
@@ -31,11 +21,10 @@ export const softHyphenRule: Rule = {
   detect(ctx: RuleContext): Finding {
     const doc = ctx.document();
     let chars = 0;
-    for (const t of elements(doc, 'w:t')) {
-      const text = t.textContent ?? '';
-      for (const ch of text) if (ch === SOFT_HYPHEN) chars++;
+    for (const t of elementsByTag(doc, 'w:t')) {
+      for (const ch of t.textContent ?? '') if (ch === SOFT_HYPHEN) chars++;
     }
-    const els = elements(doc, 'w:softHyphen').length;
+    const els = elementsByTag(doc, 'w:softHyphen').length;
     const total = chars + els;
     return {
       ruleId: this.id,
@@ -52,23 +41,20 @@ export const softHyphenRule: Rule = {
     const doc = ctx.document();
     const log: ChangeLogEntry[] = [];
 
-    for (const t of elements(doc, 'w:t')) {
-      const text = t.textContent ?? '';
-      if (text.includes(SOFT_HYPHEN)) {
-        const cleaned = text.split(SOFT_HYPHEN).join('');
-        t.textContent = cleaned;
-        log.push({
-          ruleId: this.id,
-          category: 'character',
-          kind: 'delete-soft-hyphen-char',
-          altersText: true,
-          before: text,
-          after: cleaned,
-        });
-      }
+    for (const { before, after } of mapTextRuns(doc, (text) =>
+      text.split(SOFT_HYPHEN).join(''),
+    )) {
+      log.push({
+        ruleId: this.id,
+        category: 'character',
+        kind: 'delete-soft-hyphen-char',
+        altersText: true,
+        before,
+        after,
+      });
     }
 
-    for (const el of elements(doc, 'w:softHyphen')) {
+    for (const el of elementsByTag(doc, 'w:softHyphen')) {
       el.parentNode?.removeChild(el);
       log.push({
         ruleId: this.id,

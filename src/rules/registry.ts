@@ -1,5 +1,6 @@
 import type { Rule } from '../engine/types.js';
 import { softHyphenRule } from './character/soft-hyphen.js';
+import { ligaturesRule } from './character/ligatures.js';
 
 /**
  * All rules, listed in pipeline order (see the paper, section 5.3). Order
@@ -19,6 +20,7 @@ export const PIPELINE: readonly Rule[] = [
   // 7. Line spacing normalize         -> layout     (Phase 1)
   // 8. Character rules:
   softHyphenRule,
+  ligaturesRule,
   // 9. Final validation is run by the pipeline itself.
 ];
 
