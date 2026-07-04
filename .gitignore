@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+coverage/
+*.log
+.DS_Store
+
+# Never commit secrets — tokens, keys, local env
+.env
+.env.*
+*.pem
+*.key
+secrets.*
