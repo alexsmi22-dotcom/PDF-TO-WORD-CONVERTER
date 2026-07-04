@@ -66,8 +66,31 @@ docs/        design paper and rule-authoring guide
 npm install
 npm test         # vitest — pure engine, no Word needed
 npm run typecheck
-npm run build    # add-in bundle (once the task pane lands)
+npm run build    # production task-pane bundle -> dist/
 ```
+
+## Run it in Word
+
+Office add-ins must be served over HTTPS with a trusted cert.
+
+```bash
+npm run certs      # one-time: install a trusted localhost dev certificate
+npm run validate   # sanity-check the manifest
+npm run dev        # serve the task pane at https://localhost:3000
+```
+
+Then load the add-in (in a second terminal):
+
+```bash
+npm run start      # sideload manifest/manifest.xml into Word and open it
+# npm run stop     # remove the sideloaded add-in
+```
+
+Or sideload manually: in Word, **Home → Add-ins → Advanced → Upload My Add-in**
+and pick `manifest/manifest.xml`. A **Repair document** button appears on the
+Home tab; click it to open the task pane, then **Scan** → review → **Repair**.
+
+> The task pane reads the *saved* state of the document, so save before scanning.
 
 ## Contributing
 

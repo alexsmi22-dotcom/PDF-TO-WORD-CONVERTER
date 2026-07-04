@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conversion Repair</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="./taskpane.css" />
+  </head>
+  <body>
+    <main id="app">
+      <header>
+        <h1>Conversion Repair</h1>
+        <p class="sub">Clean up PDF-to-Word conversion damage. Your document never leaves this machine.</p>
+      </header>
+
+      <section id="intro">
+        <button id="scan" class="primary" disabled>Scan document</button>
+        <p id="status" class="status">Loading…</p>
+      </section>
+
+      <section id="report" hidden>
+        <p id="summary" class="summary"></p>
+        <ul id="findings" class="findings"></ul>
+        <div class="actions">
+          <button id="apply" class="primary">Repair (open a clean copy)</button>
+          <button id="rescan" class="secondary">Rescan</button>
+        </div>
+        <p class="note">Repairs open as a new document. Your original is untouched.</p>
+      </section>
+
+      <section id="done" hidden>
+        <p id="done-summary" class="summary"></p>
+        <ul id="changelog" class="changelog"></ul>
+        <button id="again" class="secondary">Scan another document</button>
+      </section>
+    </main>
+    <script type="module" src="./taskpane.ts"></script>
+  </body>
+</html>
