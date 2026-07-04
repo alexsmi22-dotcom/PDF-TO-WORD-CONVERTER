@@ -92,6 +92,32 @@ Home tab; click it to open the task pane, then **Scan** → review → **Repair*
 
 > The task pane reads the *saved* state of the document, so save before scanning.
 
+## PDF → editable Word wizard (scanned patents & image PDFs)
+
+For PDFs that are **scanned images with no text layer** (e.g. patents downloaded
+from Google Patents), the repair rules have nothing to work on — there is no
+text. The `wizard` turns those into editable Word documents with **local OCR**:
+
+```
+PDF ─► [OCR helper: Apple Vision on Mac | Windows.Media.Ocr on PC]
+       └─► common OCR JSON (text + position boxes)
+             └─► reading-order + paragraphs (src/wizard/layout.ts)
+                   └─► figure pages kept as images, text pages as editable text
+                         └─► repair-engine character cleanup ─► editable .docx
+```
+
+Everything runs **on the machine** — nothing is uploaded, which matters for
+confidential/legal documents. Only the OCR helper is platform-specific (see
+[`ocr/`](ocr/)); the rest is one shared TypeScript pipeline.
+
+```bash
+# macOS
+swiftc -O ocr/mac/vision_ocr.swift -o ocr/mac/vision_ocr
+npx vite-node src/wizard/wizard.ts input.pdf output.docx
+```
+
+On Windows, build the OCR helper first — see [`ocr/win/README.md`](ocr/win/README.md).
+
 ## Contributing
 
 One rule per pull request. Fixtures required. No cross-rule imports. Character

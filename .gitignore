@@ -15,3 +15,7 @@ secrets.*
 # compiled OCR helper binaries
 ocr/mac/vision_ocr
 ocr/win/*.exe
+
+# .NET build output (Windows OCR helper)
+ocr/win/bin/
+ocr/win/obj/
