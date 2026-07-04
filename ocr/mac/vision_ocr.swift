@@ -14,6 +14,8 @@ import Foundation
 import PDFKit
 import Vision
 import CoreGraphics
+import ImageIO
+import UniformTypeIdentifiers
 
 let args = CommandLine.arguments
 guard args.count >= 2 else {
@@ -65,14 +67,28 @@ func ocr(_ image: CGImage) -> [[String: Any]] {
     }
 }
 
+// Temp dir for per-page PNGs, so the pipeline can embed figure pages as images.
+let imgDir = NSTemporaryDirectory() + "visionocr_\(ProcessInfo.processInfo.processIdentifier)/"
+try? FileManager.default.createDirectory(atPath: imgDir, withIntermediateDirectories: true)
+
+func savePNG(_ image: CGImage, _ path: String) -> Bool {
+    guard let dest = CGImageDestinationCreateWithURL(
+        URL(fileURLWithPath: path) as CFURL, UTType.png.identifier as CFString, 1, nil) else { return false }
+    CGImageDestinationAddImage(dest, image, nil)
+    return CGImageDestinationFinalize(dest)
+}
+
 var pages: [[String: Any]] = []
 for i in 0..<min(doc.pageCount, maxPages) {
     guard let page = doc.page(at: i), let img = render(page) else { continue }
     let rect = page.bounds(for: .mediaBox)
+    let imgPath = imgDir + "page_\(i).png"
+    let saved = savePNG(img, imgPath)
     pages.append([
         "index": i,
         "width": rect.width,
         "height": rect.height,
+        "image": saved ? imgPath : "",
         "lines": ocr(img),
     ])
     FileHandle.standardError.write("ocr page \(i + 1)/\(doc.pageCount)\n".data(using: .utf8)!)

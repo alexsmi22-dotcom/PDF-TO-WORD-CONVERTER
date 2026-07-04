@@ -8,7 +8,7 @@ import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 (globalThis as unknown as { XMLSerializer: unknown }).XMLSerializer = XMLSerializer;
 
 import { spawnSync } from 'node:child_process';
-import { writeFileSync, existsSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, basename } from 'node:path';
 import type { OcrDoc } from './ocr-types.js';
@@ -62,7 +62,16 @@ async function main(): Promise<void> {
   console.error(`OCR done: ${ocr.pages.length} pages via ${ocr.engine}.`);
 
   const blocks = docToBlocks(ocr.pages);
-  console.error(`Reconstructed ${blocks.filter((b) => b.kind !== 'pagebreak').length} blocks.`);
+  // Load image bytes for figure pages we're embedding.
+  let figures = 0;
+  for (const b of blocks) {
+    if (b.kind === 'image' && b.imagePath && existsSync(b.imagePath)) {
+      b.imageBytes = new Uint8Array(readFileSync(b.imagePath));
+      figures += 1;
+    }
+  }
+  const textBlocks = blocks.filter((b) => b.kind !== 'pagebreak' && b.kind !== 'image').length;
+  console.error(`Reconstructed ${textBlocks} text blocks, ${figures} figure pages kept as images.`);
 
   let bytes = await buildDocx(blocks, basename(input).replace(/\.pdf$/i, ''));
 

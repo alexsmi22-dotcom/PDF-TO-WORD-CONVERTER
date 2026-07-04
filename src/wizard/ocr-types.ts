@@ -15,6 +15,8 @@ export interface OcrPage {
   /** Page size in points (for aspect ratio; layout uses normalized coords). */
   width: number;
   height: number;
+  /** Path to a rendered PNG of the page (for embedding figure pages as images). */
+  image?: string;
   lines: OcrLine[];
 }
 
@@ -25,7 +27,9 @@ export interface OcrDoc {
 
 /** A reconstructed content block, ready to become a Word paragraph. */
 export interface Block {
-  kind: 'heading' | 'body' | 'pagebreak';
+  kind: 'heading' | 'body' | 'pagebreak' | 'image';
   level?: number; // heading level 1..3
   text?: string;
+  imagePath?: string; // for kind 'image', set by layout
+  imageBytes?: Uint8Array; // for kind 'image', filled by the wizard
 }

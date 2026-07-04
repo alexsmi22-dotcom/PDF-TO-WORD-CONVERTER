@@ -73,7 +73,9 @@ export function pageToBlocks(page: OcrPage): Block[] {
     if (!cur) return;
     const text = joinLines(cur.texts);
     if (text) {
-      const heading = cur.h > medianH * 1.35 && text.length < 90;
+      // A heading is a distinctly larger, short line that isn't a sentence.
+      const heading =
+        cur.h > medianH * 1.55 && text.length < 70 && !/[.,;:]$/.test(text);
       blocks.push(
         heading
           ? { kind: 'heading', level: headingLevel(cur.h, medianH), text }
@@ -88,8 +90,8 @@ export function pageToBlocks(page: OcrPage): Block[] {
     const newParagraph =
       !cur ||
       gap > medianH * 0.9 || // more than ~a line of vertical space
-      l.h > medianH * 1.35 || // a heading-sized line stands alone
-      (cur && Math.abs(l.h - cur.h) > medianH * 0.5); // font size shift
+      l.h > medianH * 1.55 || // a heading-sized line stands alone
+      (cur && Math.abs(l.h - cur.h) > medianH * 0.6); // font size shift
 
     if (newParagraph) {
       flush();
@@ -103,12 +105,27 @@ export function pageToBlocks(page: OcrPage): Block[] {
   return blocks;
 }
 
+/**
+ * A page with little text is a figure/drawing sheet — reconstructing its
+ * scattered labels as prose produces garbage, so we embed the page image
+ * instead. Text pages of a patent carry ~1500-3000 characters; drawing sheets
+ * carry only a few hundred (figure numbers and short labels).
+ */
+export function isDrawingPage(page: OcrPage): boolean {
+  const chars = page.lines.reduce((n, l) => n + l.text.trim().length, 0);
+  return chars < 800;
+}
+
 /** Turn a whole OCR document into blocks, with page breaks between pages. */
 export function docToBlocks(pages: OcrPage[]): Block[] {
   const out: Block[] = [];
   pages.forEach((page, i) => {
     if (i > 0) out.push({ kind: 'pagebreak' });
-    out.push(...pageToBlocks(page));
+    if (isDrawingPage(page) && page.image) {
+      out.push({ kind: 'image', imagePath: page.image });
+    } else {
+      out.push(...pageToBlocks(page));
+    }
   });
   return out;
 }
