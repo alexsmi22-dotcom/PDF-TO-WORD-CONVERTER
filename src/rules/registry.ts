@@ -7,6 +7,7 @@ import { emptyParagraphsRule } from './layout/empty-paragraphs.js';
 import { softHyphenRule } from './character/soft-hyphen.js';
 import { ligaturesRule } from './character/ligatures.js';
 import { confusablesRule } from './character/confusables.js';
+import { artifactsRule, straySymbolsRule } from './character/artifacts.js';
 
 /**
  * All rules, listed in pipeline order (see the paper, section 5.3). Order
@@ -36,6 +37,8 @@ export const PIPELINE: readonly Rule[] = [
   softHyphenRule,
   ligaturesRule,
   confusablesRule,
+  artifactsRule, // strip postal-barcode text, tofu, zero-width/control chars
+  straySymbolsRule, // remove mis-mapped Wingdings bullets (£) not next to a digit
   // 9. Final validation is run by the pipeline itself.
 ];
 
