@@ -1,5 +1,5 @@
 import type { Rule, RuleContext, Finding, ChangeLogEntry } from '../../engine/types.js';
-import { childTags } from '../structural/sections.js';
+import { childTags } from '../../engine/dom.js';
 
 /**
  * A paragraph is "blank" only if it carries no text characters at all AND

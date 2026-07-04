@@ -1,6 +1,5 @@
 import type { Rule, RuleContext, Finding, ChangeLogEntry } from '../../engine/types.js';
-import { elementsByTag } from '../../engine/dom.js';
-import { childTag, childTags } from './sections.js';
+import { elementsByTag, childTag, childTags } from '../../engine/dom.js';
 
 /** Column definitions with more than one column. */
 function multiColumnDefs(doc: Document): Element[] {

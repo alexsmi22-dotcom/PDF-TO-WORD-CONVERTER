@@ -1,21 +1,5 @@
 /** Shared helpers for reasoning about WordprocessingML sections (w:sectPr). */
-
-/** First direct child element with the given qualified tag name. */
-export function childTag(el: Element, tag: string): Element | null {
-  for (let n = el.firstChild; n; n = n.nextSibling) {
-    if (n.nodeType === 1 && n.nodeName === tag) return n as Element;
-  }
-  return null;
-}
-
-/** All direct child elements with the given qualified tag name. */
-export function childTags(el: Element, tag: string): Element[] {
-  const out: Element[] = [];
-  for (let n = el.firstChild; n; n = n.nextSibling) {
-    if (n.nodeType === 1 && n.nodeName === tag) out.push(n as Element);
-  }
-  return out;
-}
+import { childTag } from '../../engine/dom.js';
 
 /** A paragraph-level section lives in w:pPr; the final one is a child of w:body. */
 export function isParagraphSection(sectPr: Element): boolean {

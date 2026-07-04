@@ -1,6 +1,7 @@
 import type { Rule } from '../engine/types.js';
 import { sectionBreaksRule } from './structural/section-breaks.js';
 import { columnsRule } from './structural/columns.js';
+import { styleInferenceRule } from './style/style-inference.js';
 import { emptyParagraphsRule } from './layout/empty-paragraphs.js';
 import { softHyphenRule } from './character/soft-hyphen.js';
 import { ligaturesRule } from './character/ligatures.js';
@@ -22,7 +23,9 @@ export const PIPELINE: readonly Rule[] = [
   //    section properties, so section handling decides what survives):
   sectionBreaksRule,
   columnsRule,
-  // 5. Style inference                -> style      (Phase 1.1)
+  // 5. Style inference (reads direct-formatting signals before layout rules
+  //    normalize them away):
+  styleInferenceRule,
   // 6. Paragraph reflow (Phase 1.1), then empty paragraph collapse:
   emptyParagraphsRule,
   // 7. Line spacing normalize         -> layout     (Phase 1)

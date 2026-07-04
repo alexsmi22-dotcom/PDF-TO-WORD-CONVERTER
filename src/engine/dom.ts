@@ -4,6 +4,23 @@
  * one-rule-per-PR contribution model.
  */
 
+/** First direct child element with the given qualified tag name. */
+export function childTag(el: Element, tag: string): Element | null {
+  for (let n = el.firstChild; n; n = n.nextSibling) {
+    if (n.nodeType === 1 && n.nodeName === tag) return n as Element;
+  }
+  return null;
+}
+
+/** All direct child elements with the given qualified tag name. */
+export function childTags(el: Element, tag: string): Element[] {
+  const out: Element[] = [];
+  for (let n = el.firstChild; n; n = n.nextSibling) {
+    if (n.nodeType === 1 && n.nodeName === tag) out.push(n as Element);
+  }
+  return out;
+}
+
 /** Snapshot a live element collection into a stable array before mutating. */
 export function elementsByTag(doc: Document, tag: string): Element[] {
   const live = doc.getElementsByTagName(tag);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="32"/></w:rPr><w:t>Chapter One</w:t></w:r></w:p>
+    <w:p><w:pPr><w:pStyle w:val="Heading2"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="26"/></w:rPr><w:t>Introduction</w:t></w:r></w:p>
+    <w:p><w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t>This is a normal body paragraph with plenty of text and a period.</w:t></w:r></w:p>
+    <w:p><w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t>Another body paragraph, also ending with a period.</w:t></w:r></w:p>
+  </w:body>
+</w:document>
