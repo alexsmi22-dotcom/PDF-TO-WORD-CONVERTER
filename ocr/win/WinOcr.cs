@@ -67,12 +67,21 @@ internal static class WinOcr
             using PdfPage page = pdf.GetPage(i);
             var pageSize = page.Size;
 
+            // Windows OCR rejects images larger than MaxImageDimension; clamp the
+            // render scale so a big page can't throw.
+            double scale = RenderScale;
+            double maxDim = OcrEngine.MaxImageDimension;
+            if (pageSize.Width * scale > maxDim || pageSize.Height * scale > maxDim)
+            {
+                scale = Math.Min(maxDim / pageSize.Width, maxDim / pageSize.Height);
+            }
+
             // Render the page to a bitmap stream at higher resolution.
             using var renderStream = new InMemoryRandomAccessStream();
             var opts = new PdfPageRenderOptions
             {
-                DestinationWidth = (uint)(pageSize.Width * RenderScale),
-                DestinationHeight = (uint)(pageSize.Height * RenderScale),
+                DestinationWidth = (uint)(pageSize.Width * scale),
+                DestinationHeight = (uint)(pageSize.Height * scale),
             };
             await page.RenderToStreamAsync(renderStream, opts);
 

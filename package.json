@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "wizard": "vite-node src/wizard/wizard.ts",
     "certs": "office-addin-dev-certs install",
     "validate": "office-addin-manifest validate manifest/manifest.xml",
     "start": "office-addin-debugging start manifest/manifest.xml",
