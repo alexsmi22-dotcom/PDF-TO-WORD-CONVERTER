@@ -19,3 +19,6 @@ ocr/win/*.exe
 # .NET build output (Windows OCR helper)
 ocr/win/bin/
 ocr/win/obj/
+
+# web build output
+dist-web/

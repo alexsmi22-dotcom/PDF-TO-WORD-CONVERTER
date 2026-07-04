@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conversion Repair — clean up a converted Word file</title>
+    <link rel="stylesheet" href="./web.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Conversion Repair</h1>
+        <p class="sub">
+          Clean up a <strong>.docx</strong> that was converted from a PDF — remove stray
+          section &amp; column breaks, lift text out of floating boxes, fix OCR character
+          errors (1↔l, o↔0), and strip junk symbols.
+        </p>
+        <p class="privacy">🔒 Everything runs in your browser. Your file never leaves this computer.</p>
+      </header>
+
+      <section id="drop" class="drop" tabindex="0" role="button" aria-label="Choose or drop a .docx file">
+        <div class="drop-inner">
+          <div class="drop-icon">📄</div>
+          <p><strong>Drag a .docx here</strong> or click to choose</p>
+          <p class="hint">The file must open in Word with selectable text (not a scanned image).</p>
+        </div>
+        <input id="file" type="file" accept=".docx" hidden />
+      </section>
+
+      <p id="status" class="status" hidden></p>
+
+      <section id="report" class="card" hidden>
+        <h2 id="report-title"></h2>
+        <ul id="findings" class="findings"></ul>
+        <div class="actions">
+          <button id="repair" class="primary">Repair &amp; download</button>
+          <button id="reset" class="secondary">Choose another file</button>
+        </div>
+      </section>
+
+      <section id="done" class="card" hidden>
+        <p id="done-msg" class="done-msg"></p>
+        <button id="again" class="secondary">Repair another file</button>
+      </section>
+
+      <footer>
+        <p>Free &amp; open source · No upload · Works offline</p>
+      </footer>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
