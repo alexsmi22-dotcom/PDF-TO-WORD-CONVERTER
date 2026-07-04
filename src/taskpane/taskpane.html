@@ -20,13 +20,16 @@
       </section>
 
       <section id="report" hidden>
-        <p id="summary" class="summary"></p>
+        <div class="report-head">
+          <span id="summary" class="summary"></span>
+          <label class="selectall"><input type="checkbox" id="selectall" /> Select all</label>
+        </div>
         <ul id="findings" class="findings"></ul>
         <div class="actions">
-          <button id="apply" class="primary">Repair (open a clean copy)</button>
+          <button id="apply" class="primary">Repair selected</button>
           <button id="rescan" class="secondary">Rescan</button>
         </div>
-        <p class="note">Repairs open as a new document. Your original is untouched.</p>
+        <p id="apply-hint" class="note">Repairs open as a new document. Your original is untouched.</p>
       </section>
 
       <section id="done" hidden>

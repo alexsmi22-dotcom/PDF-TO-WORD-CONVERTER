@@ -10,10 +10,13 @@
  * (a layout rule) does not register as a text change.
  */
 export function visibleText(doc: Document): string {
+  return textRuns(doc).join('');
+}
+
+/** The text of every w:t run, in document order, as an array. */
+export function textRuns(doc: Document): string[] {
   const runs = doc.getElementsByTagName('w:t');
-  let out = '';
-  for (let i = 0; i < runs.length; i++) {
-    out += runs[i]?.textContent ?? '';
-  }
+  const out: string[] = [];
+  for (let i = 0; i < runs.length; i++) out.push(runs[i]?.textContent ?? '');
   return out;
 }

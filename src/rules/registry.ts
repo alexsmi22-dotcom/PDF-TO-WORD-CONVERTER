@@ -1,4 +1,5 @@
 import type { Rule } from '../engine/types.js';
+import { textBoxesRule } from './structural/text-boxes.js';
 import { sectionBreaksRule } from './structural/section-breaks.js';
 import { columnsRule } from './structural/columns.js';
 import { styleInferenceRule } from './style/style-inference.js';
@@ -17,7 +18,9 @@ import { confusablesRule } from './character/confusables.js';
  * layout, and style rules land in Phase 1.
  */
 export const PIPELINE: readonly Rule[] = [
-  // 2. Text box extraction            -> structural (Phase 1.1)
+  // 2. Text box extraction (runs first so lifted text participates in every
+  //    later rule):
+  textBoxesRule,
   // 3. Header/footer/page dedup       -> structural (Phase 1.1)
   // 4. Section normalize, then column flatten (order matters: columns live in
   //    section properties, so section handling decides what survives):

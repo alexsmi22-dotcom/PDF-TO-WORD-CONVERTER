@@ -1,6 +1,6 @@
 import type { DocumentModel } from './model.js';
 import type { Rule, Finding, ChangeLogEntry } from './types.js';
-import { visibleText } from './text.js';
+import { textRuns } from './text.js';
 import { checkTextConservation } from './invariant.js';
 import { PIPELINE } from '../rules/registry.js';
 
@@ -41,7 +41,7 @@ export function runPipeline(
   const rules = opts.rules ?? PIPELINE;
   const isEnabled = opts.isEnabled ?? conservative;
 
-  const beforeText = visibleText(model.document());
+  const beforeRuns = textRuns(model.document());
   const changeLog: ChangeLogEntry[] = [];
   const appliedRuleIds: string[] = [];
 
@@ -56,8 +56,8 @@ export function runPipeline(
     }
   }
 
-  const afterText = visibleText(model.document());
-  checkTextConservation(beforeText, afterText, changeLog);
+  const afterRuns = textRuns(model.document());
+  checkTextConservation(beforeRuns, afterRuns, changeLog);
 
   return { appliedRuleIds, changeLog };
 }

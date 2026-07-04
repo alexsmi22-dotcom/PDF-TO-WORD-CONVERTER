@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+  xmlns:v="urn:schemas-microsoft-com:vml">
+  <w:body>
+    <w:p>
+      <w:r>
+        <mc:AlternateContent>
+          <mc:Choice Requires="wps">
+            <w:drawing>
+              <wp:anchor>
+                <wps:txbx>
+                  <w:txbxContent>
+                    <w:p><w:r><w:t>Text trapped in a box.</w:t></w:r></w:p>
+                  </w:txbxContent>
+                </wps:txbx>
+              </wp:anchor>
+            </w:drawing>
+          </mc:Choice>
+          <mc:Fallback>
+            <w:pict>
+              <v:shape>
+                <v:textbox>
+                  <w:txbxContent>
+                    <w:p><w:r><w:t>Text trapped in a box.</w:t></w:r></w:p>
+                  </w:txbxContent>
+                </v:textbox>
+              </v:shape>
+            </w:pict>
+          </mc:Fallback>
+        </mc:AlternateContent>
+      </w:r>
+    </w:p>
+    <w:p><w:r><w:t>A normal body paragraph.</w:t></w:r></w:p>
+  </w:body>
+</w:document>

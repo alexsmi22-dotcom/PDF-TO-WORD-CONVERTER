@@ -92,9 +92,38 @@ button:disabled {
   border-color: var(--line);
 }
 
+.report-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .summary {
   font-weight: 600;
-  margin: 0 0 8px;
+}
+
+.selectall {
+  font-size: 12px;
+  color: var(--sub);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.finding-preview {
+  margin: 6px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.finding-preview span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .findings {
