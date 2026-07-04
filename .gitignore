@@ -11,3 +11,7 @@ coverage/
 *.pem
 *.key
 secrets.*
+
+# compiled OCR helper binaries
+ocr/mac/vision_ocr
+ocr/win/*.exe

@@ -23,8 +23,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.0",
-    "@xmldom/xmldom": "^0.9.6",
     "@types/office-js": "^1.0.400",
+    "@xmldom/xmldom": "^0.9.6",
     "office-addin-debugging": "^6.1.1",
     "office-addin-dev-certs": "^2.0.9",
     "office-addin-manifest": "^2.1.5",
